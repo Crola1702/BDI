@@ -1,0 +1,541 @@
+{
+	"info": {
+		"_postman_id": "e8eaf05d-a7c3-4d3d-b4c0-05e2b3c3014d",
+		"name": "Properties",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12849260"
+	},
+	"item": [
+		{
+			"name": "Add Admin User Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.collectionVariables.set(\"user_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"property_admin\",\n    \"password\": \"property\",\n    \"role\": \"property_admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response with token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.not.be.null",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"admin_access_token\", pm.response.json().token);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"property_admin\",\n    \"password\": \"property\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.collectionVariables.set(\"property_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"area\": 80,\r\n    \"location\": {\r\n        \"latitude\": 4.595343191369384,\r\n        \"longitude\": -74.0776402571316,\r\n        \"address\": \"My Super Address\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/properties",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get properties",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('Number of museums > ' + 0, function () {",
+							"   pm.expect(pm.response.json().length).to.greaterThan(0)",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/properties",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Property not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{property_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Property not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"area\": 85\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"area\": 85\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{property_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Property not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/properties/{{property_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "ubicacion_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "inmueble_id",
+			"value": "0"
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "admin_access_token",
+			"value": ""
+		},
+		{
+			"key": "invalid_id",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string"
+		},
+		{
+			"key": "property_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

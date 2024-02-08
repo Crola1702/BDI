@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "b5e3c209-97e0-4497-bd37-49c31e54fe74",
+		"name": "Question Response",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24627835"
+	},
+	"item": [
+		{
+			"name": "create admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan3\",\n    \"password\": \"adminjuan3\",\n    \"role\": \"admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.collectionVariables.set(\"admin_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan3\",\n    \"password\": \"adminjuan3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create normal user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan3\",\n    \"password\": \"juan3\",\n    \"role\": \"user\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"pm.collectionVariables.set(\"user_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan3\",\n    \"password\": \"juan3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"pregunta_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\": \"pregunta\",\r\n    \"type\": \"Puedo usarlo para hacer fiestas locas?\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"respuesta_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"respuesta\",\r\n    \"comment\": \"Si, las mascotas estan permitidas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add Question Response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/comments/{{pregunta_id}}/{{respuesta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"comments",
+						"{{pregunta_id}}",
+						"{{respuesta_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get question by response Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/comments/{{pregunta_id}}/{{respuesta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"comments",
+						"{{pregunta_id}}",
+						"{{respuesta_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get response by question Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/comments/{{pregunta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"comments",
+						"{{pregunta_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete comment post Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"   pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/comments/{{pregunta_id}}/{{respuesta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"comments",
+						"{{pregunta_id}}",
+						"{{respuesta_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

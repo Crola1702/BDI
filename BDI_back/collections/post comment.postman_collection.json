@@ -1,0 +1,483 @@
+{
+	"info": {
+		"_postman_id": "5755217d-d346-4e46-a4be-226ecf8d2125",
+		"name": "post comment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24627835"
+	},
+	"item": [
+		{
+			"name": "create admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan2\",\n    \"password\": \"adminjuan2\",\n    \"role\": \"admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.collectionVariables.set(\"admin_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan2\",\n    \"password\": \"adminjuan2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create normal user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan2\",\n    \"password\": \"juan2\",\n    \"role\": \"user\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.collectionVariables.set(\"user_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan2\",\n    \"password\": \"juan2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"post_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": 900000000,\n    \"contactPhone\": \"+57 3155222119\",\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\n    \"contractType\": \"sale\",\n    \"property\": {\n        \"area\": 80\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"comment_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\": \"pregunta\",\r\n    \"type\": \"Puedo usarlo para hacer fiestas locas?\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add comment post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/{{post_id}}/comment/{{comment_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"{{post_id}}",
+						"comment",
+						"{{comment_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get comment post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/{{post_id}}/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"{{post_id}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "associate comment post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"comment\": \"pregunta\",\n        \"type\": \"Puedo usarlo para hacer fiestas locas?\",\n        \"id\": \"{{comment_id}}\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/{{post_id}}/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"{{post_id}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete comment post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"   pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/{{post_id}}/comments/{{comment_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"{{post_id}}",
+						"comments",
+						"{{comment_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

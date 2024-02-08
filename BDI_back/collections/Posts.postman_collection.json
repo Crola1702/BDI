@@ -1,0 +1,650 @@
+{
+	"info": {
+		"_postman_id": "66ea2d13-0d40-4187-8629-9d557f695fda",
+		"name": "Posts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12849260"
+	},
+	"item": [
+		{
+			"name": "Add Admin User Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.collectionVariables.set(\"user_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"post_admin\",\n    \"password\": \"post_admin\",\n    \"role\": \"post_admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response with token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.not.be.null",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"admin_access_token\", pm.response.json().token);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"username\": \"post_admin\",\n    \"password\": \"post_admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create post with invalid contracttype",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Invalid contract type\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": 900000000,\n    \"contactPhone\": \"+57 3155222119\",\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\n    \"contractType\": \"free\",\n    \"property\": {\n        \"area\": 80\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.collectionVariables.set(\"post_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": 900000000,\n    \"contactPhone\": \"+57 3155222119\",\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\n    \"contractType\": \"sale\",\n    \"property\": {\n        \"area\": 80\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get invalid post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Post not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{post_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{post_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update invalid post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Post not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": 1000000000,\n    \"contactPhone\": \"+57 3155222119\",\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\n    \"contractType\": \"rent\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"price\": 1000000000,\n    \"contactPhone\": \"+57 3155222119\",\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\n    \"contractType\": \"rent\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{post_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{post_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updade invalid post to a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   pm.expect(pm.response.json().message).to.eql(\"Post not found\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 900000000,\r\n    \"contactPhone\": \"+57 3155222119\",\r\n    \"description\": \"Chicó Norte apartment. 3 bedrooms. 2 bathrooms. Duplex. Administration fee included. 1 parking spot.\",\r\n    \"contractType\": \"sale\",\r\n    \"property\": {\r\n        \"area\": 80\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete invalid post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Get expected error message\", function () {",
+							"   pm.expect(pm.response.json().message).to.eql(\"Post not found\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{invalid_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts/{{post_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"{{post_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "invalid_id",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string"
+		},
+		{
+			"key": "post_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "admin_access_token",
+			"value": ""
+		},
+		{
+			"key": "property_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

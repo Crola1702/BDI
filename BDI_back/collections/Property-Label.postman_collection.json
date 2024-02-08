@@ -1,0 +1,1128 @@
+{
+	"info": {
+		"_postman_id": "df693977-bb75-4ce1-b567-7982d2fd6d89",
+		"name": "Property-Label",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25914917"
+	},
+	"item": [
+		{
+			"name": "Add Admin User Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.collectionVariables.set(\"user_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"role\": \"admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response with token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.not.be.null",
+							"});",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"admin_access_token\", pm.response.json().token);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();",
+							"pm.collectionVariables.set(\"property_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"area\": 80,\r\n    \"location\": {\r\n        \"latitude\": 4.595343191369384,\r\n        \"longitude\": -74.0776402571316,\r\n        \"address\": \"My Super Address\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/properties",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a label 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.collectionVariables.set(\"label_id_1\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Habitaciones\",\r\n    \"value\": \"6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a label 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.collectionVariables.set(\"label_id_2\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Baños\",\r\n    \"value\": \"4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a label to a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add an invalid label to a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.expect(data.message).to.eql(\"The label with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{INVALID_ID}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{INVALID_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a label to an invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"    var data = pm.response.json();\r",
+							"    pm.expect(data.message).to.eql(\"The property with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{INVALID_ID}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{INVALID_ID}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a label for a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get an invalid label for a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The label with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{INVALID_ID}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{INVALID_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a label for an invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The property with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{INVALID_ID}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{INVALID_ID}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a label not associated to a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The label with the given id is not associated to the property\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{label_id_2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{label_id_2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all labels of a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all labels of an invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The property with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{INVALID_ID}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{INVALID_ID}}",
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update labels for a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"id\": \"{{label_id_2}}\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update labels for an invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The property with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"id\": \"{{label_id_2}}\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/properties/{{INVALID_ID}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{INVALID_ID}}",
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update invalid labels for a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The label with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"id\": \"{{INVALID_ID}}\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a label from a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"   pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{label_id_2}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{label_id_2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a label from an invalid property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The property with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{INVALID_ID}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{INVALID_ID}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an invalid label from a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The label with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{INVALID_ID}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{INVALID_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a label not associated to a property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The label with the given id is not associated to the property\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/properties/{{property_id}}/labels/{{label_id_1}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"properties",
+						"{{property_id}}",
+						"labels",
+						"{{label_id_1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an user Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/users/{{user_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "property_id",
+			"value": ""
+		},
+		{
+			"key": "label_id",
+			"value": ""
+		},
+		{
+			"key": "label_id_1",
+			"value": ""
+		},
+		{
+			"key": "label_id_2",
+			"value": ""
+		},
+		{
+			"key": "INVALID_ID",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "admin_access_token",
+			"value": ""
+		}
+	]
+}

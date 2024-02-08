@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "e3602991-f251-4431-9807-525ad8a61143",
+		"name": "Comment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24627835"
+	},
+	"item": [
+		{
+			"name": "create admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan\",\n    \"password\": \"adminjuan\",\n    \"role\": \"admin\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"",
+							"pm.collectionVariables.set(\"admin_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"adminjuan\",\n    \"password\": \"adminjuan\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create normal user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan\",\n    \"password\": \"juan\",\n    \"role\": \"user\",\n    \"verifiedUser\": true,\n    \"approvedForSale\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"})",
+							"pm.collectionVariables.set(\"user_token\", pm.response.json().token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"juan\",\n    \"password\": \"juan\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"pregunta_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\": \"pregunta\",\r\n    \"type\": \"Puedo usarlo para hacer fiestas locas?\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"pm.globals.set(\"pregunta_id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function() {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"respuesta\",\r\n    \"comment\": \"Si, las mascotas estan permitidas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/{{pregunta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"{{pregunta_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Pregunta",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"tipo\": \"pregunta\",\r\n    \"comentario\": \"Las mascotas estan permitidas?\",\r\n    \"respuesta\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/all",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"all"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get comentarios",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \"id\": 1,\n    \"tipo\": \"pregunta\",\n    \"comentario\": \"Las mascotas estan permitidas?\",\n    \"respuesta\": {}\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Actualizar pregunta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"pregunta\",\r\n    \"comment\": \"Las mascotas estan permitidas? Es que estoy interesado y tengo dos golden retrievers\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/{{pregunta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"{{pregunta_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar pregunta",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"tipo\": \"pregunta\",\r\n    \"comentario\": \"Las mascotas estan permitidas? Es que estoy interesado y tengo dos golden retrievers\",\r\n    \"respuesta\": {}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios",
+								"1"
+							]
+						}
+					},
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Actualizar respuesta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"type\": \"respuesta\",\r\n    \"comment\": \"Bueno, hay un limite con las mascotas y esas ya son demasiadas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/{{respuesta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"{{respuesta_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar respuesta",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"tipo\": \"respuesta\",\r\n    \"comentario\": \"Bueno, hay un limite con las mascotas y esas ya son demasiadas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios",
+								"1"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Borrar una pregunta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"   pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/{{pregunta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"{{pregunta_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Borrar una pregunta",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"statusCode\": 200,\r\n    \"message\": \"La pregunta se ha borrado conrerctamente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios",
+								"1"
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Borrar respuesta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"   pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/post/comments/{{respuesta_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post",
+						"comments",
+						"{{respuesta_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Borrar respuesta",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"statusCode\": 200,\r\n    \"message\": \"La pregunta se ha borrado conrerctamente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/publicaciones/1/comentarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"publicaciones",
+								"1",
+								"comentarios",
+								"1"
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "post_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

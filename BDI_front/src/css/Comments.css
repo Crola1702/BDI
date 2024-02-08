@@ -1,0 +1,20 @@
+.comment-card {
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+  border: none;
+}
+
+@media (max-width: 576px) {
+  /* Estilos para pantallas pequeñas (hasta 576px) */
+  .comment-card {
+    max-width: 100%;
+    padding: 10px;
+  }
+}
+
+.comment-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 2px;
+}
